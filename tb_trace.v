@@ -32,9 +32,9 @@ THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 ------------------------------------------------------------------------------*/
 `timescale 1ns / 1ps
 
-`define DATA_TRACE "D:/architect_pro/lab3/ucas_CDE_v0.3/cpu132_gettrace/testbench/data_addr_trace.txt"
+//`define DATA_TRACE "D:/architect_pro/lab3/ucas_CDE_v0.3/cpu132_gettrace/testbench/data_addr_trace.txt"
 `define INSTR_TRACE "D:/architect_pro/lab3/ucas_CDE_v0.3/cpu132_gettrace/testbench/inst_addr_trace.txt"
-`define GIANT_TRACE "D:/architect_pro/lab3/ucas_CDE_v0.3/cpu132_gettrace/testbench/all_addr_trace.txt"
+//`define GIANT_TRACE "D:/architect_pro/lab3/ucas_CDE_v0.3/cpu132_gettrace/testbench/all_addr_trace.txt"
 `define CONFREG_NUM_REG      soc_lite.confreg.num_data
 `define CONFREG_OPEN_TRACE   soc_lite.confreg.open_trace
 `define CONFREG_NUM_MONITOR  soc_lite.confreg.num_monitor
@@ -113,9 +113,9 @@ integer data_visit;
 integer inst_visit;
 integer all_visit;
 initial begin
-	data_visit = $fopen(`DATA_TRACE, "w");
+	//data_visit = $fopen(`DATA_TRACE, "w");
 	inst_visit = $fopen(`INSTR_TRACE, "w");
-	all_visit = $fopen(`GIANT_TRACE, "w");
+	//all_visit = $fopen(`GIANT_TRACE, "w");
 end
 
 //monitor numeric display
@@ -176,10 +176,10 @@ begin
 	begin
 	    $display("==============================================================");
 	    $display("gettrace end!");
-		 #40;
-		$fclose(data_visit);
+		// #40;
+		//$fclose(data_visit);
 		$fclose(inst_visit);
-		$fclose(all_visit);
+		//$fclose(all_visit);
 		 $finish;
         if (err_count!=8'd0)
         begin
@@ -215,22 +215,24 @@ end
 	
 always @(posedge soc_clk)
 begin
-		if(soc_lite.cpu_inst_en == 1'b1 && soc_lite.cpu_inst_wen == 'd0 && soc_lite.cpu_data_en == 1'b1 && soc_lite.data_sram_wen == 'd0)
+		//if(debug_wb_pc != 'd0)
+		/*if(debug_wb_pc != 'd0 && soc_lite.cpu_data_en == 1'b1 && soc_lite.data_sram_wen == 'd0)
 		begin
 			$fdisplay(data_visit,"%h",soc_lite.cpu_data_addr);
-			$fdisplay(inst_visit,"%h",soc_lite.cpu_inst_addr);
+			$fdisplay(inst_visit,"%h",debug_wb_pc);
 			$fdisplay(all_visit,"%h",soc_lite.cpu_data_addr);
-			$fdisplay(all_visit,"%h",soc_lite.cpu_inst_addr);
+			$fdisplay(all_visit,"%h",debug_wb_pc);
 		end
 		else if(soc_lite.cpu_data_en == 1'b1 && soc_lite.data_sram_wen == 'd0)
 		begin
 			$fdisplay(data_visit,"%h",soc_lite.cpu_data_addr);
 			$fdisplay(all_visit,"%h",soc_lite.cpu_data_addr);
 		end
-		else if(soc_lite.cpu_inst_en == 1'b1 && soc_lite.cpu_inst_wen == 'd0)
+		else*/
+		if(debug_wb_pc != 'd0)
 		begin
-			$fdisplay(inst_visit,"%h",soc_lite.cpu_inst_addr);
-			$fdisplay(all_visit,"%h",soc_lite.cpu_inst_addr);
+			$fdisplay(inst_visit,"%h",debug_wb_pc);
+			//$fdisplay(all_visit,"%h",debug_wb_pc);
 		end
 end
     
